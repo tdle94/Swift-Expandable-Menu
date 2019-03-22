@@ -17,10 +17,10 @@ class ViewController: UIViewController {
                                                               width: 30,
                                                               height: 30))
         moreButton.bubbleShape.items = [
-            BubbleShapeItem(title: "alarm", image: UIImage(named: "alarm"), tappedAction: { print("sldkfj") }),
-            BubbleShapeItem(title: "music", image: UIImage(named: "music"), tappedAction: { print("sldkfj") }),
-            BubbleShapeItem(title: "camera", image: UIImage(named: "camera"), tappedAction: { print("sldkfj") }),
-            BubbleShapeItem(title: "camera", image: UIImage(named: "music"), tappedAction: { print("sldkfj") })
+            BubbleShapeItem(title: "music", image: UIImage(named: "music"), tappedAction: { print("music") }),
+            BubbleShapeItem(title: "camera", image: UIImage(named: "camera"), tappedAction: { print("camera") }),
+            BubbleShapeItem(title: "alarm", image: UIImage(named: "alarm"), tappedAction: { print("alarm") }),
+            BubbleShapeItem(title: "wifi", image: UIImage(named: "wifi"), tappedAction: { print("wifi") })
         ]
         view.addSubview(moreButton)
     }

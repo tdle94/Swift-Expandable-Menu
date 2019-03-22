@@ -12,11 +12,18 @@ class BubbleShape: UIView {
     open var items: [BubbleShapeItem]? {
         didSet {
             guard items != nil else { return }
-            guard let moreButton = superview as? MoreButton else { return }
             
-            widthAnchor.constraint(equalToConstant: CGFloat(items!.count) * moreButton.bounds.width).isActive = true
+            var width: CGFloat = 0
+            
+            for i in 0..<self.items!.count {
+                width += self.items![i].imageView?.image?.size.width ?? 0
+            }
+
+            widthAnchor.constraint(equalToConstant: self.marginLeft * CGFloat(self.items!.count) + width).isActive = true
         }
     }
+    
+    fileprivate var marginLeft: CGFloat = 10
 
     fileprivate lazy var shapeLayer: CAShapeLayer = {
         let shapeLayer: CAShapeLayer = CAShapeLayer()
@@ -117,17 +124,17 @@ class BubbleShape: UIView {
                                               toItem: self,
                                               attribute: .left,
                                               multiplier: 1,
-                                              constant: 0))
+                                              constant: 1))
         // constraint for the rest of items
         for i in 1..<self.items!.count {
             self.items![i].centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
             self.addConstraint(NSLayoutConstraint(item: self.items![i],
                                                   attribute: .leftMargin,
-                                                  relatedBy: .greaterThanOrEqual,
+                                                  relatedBy: .equal,
                                                   toItem: self.items![i-1],
                                                   attribute: .leftMargin,
                                                   multiplier: 1,
-                                                  constant: self.items![0].imageView?.image?.size.width ?? 0))
+                                                  constant: (self.items![i-1].imageView?.image?.size.width ?? 0) + self.marginLeft))
         }
 
     }

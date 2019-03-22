@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol BubbleShapeItemDelegate: AnyObject {
-    func bubbleShapeItem(title: String?)
-}
-
 class BubbleShapeItem: UIButton {
 
     fileprivate var tappedAction: (() -> Void)?
@@ -25,6 +21,7 @@ class BubbleShapeItem: UIButton {
         self.clipsToBounds = true
         self.tappedAction = tappedAction
         self.addTarget(self, action: #selector(self.onTap), for: UIControlEvents.touchUpInside)
+        self.titleEdgeInsets.left = 100
     }
 
     @objc fileprivate func onTap() {
