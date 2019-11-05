@@ -11,26 +11,26 @@ import UIKit
 class BubbleShape: UIView {
     open var items: [BubbleShapeItem]? {
         didSet {
-            guard items != nil else { return }
+            guard let items = items  else { return }
             
             var width: CGFloat = 0
             
-            for i in 0..<self.items!.count {
-                width += self.items![i].imageView?.image?.size.width ?? 0
+            for i in 0..<items.count {
+                width += items[i].imageView?.image?.size.width ?? 0
             }
 
-            widthAnchor.constraint(equalToConstant: self.marginLeft * CGFloat(self.items!.count) + width).isActive = true
+            widthAnchor.constraint(equalToConstant: spaceBetweenItem * CGFloat(items.count) + width).isActive = true
         }
     }
     
-    fileprivate var marginLeft: CGFloat = 10
+    fileprivate var spaceBetweenItem: CGFloat = 20
 
     fileprivate lazy var shapeLayer: CAShapeLayer = {
         let shapeLayer: CAShapeLayer = CAShapeLayer()
-        shapeLayer.path = self.path.cgPath
+        shapeLayer.path = path.cgPath
         shapeLayer.fillColor = UIColor.clear.cgColor
         shapeLayer.strokeColor = UIColor(red: 0.99, green: 0.99, blue: 0.99, alpha: 1.0).cgColor
-        shapeLayer.frame = self.bounds
+        shapeLayer.frame = bounds
         return shapeLayer
     }()
 
@@ -63,13 +63,13 @@ class BubbleShape: UIView {
         shadowLayer.shadowOffset = CGSize(width: 2.0, height: 2.0)
         shadowLayer.shadowOpacity = 0.8
         shadowLayer.shadowRadius = 2
-        shadowLayer.frame = self.bounds
+        shadowLayer.frame = bounds
 
         return shadowLayer
     }()
 
     open func animateDisappearance() {
-        guard items != nil else { return }
+        guard let items = items else { return }
 
         let scale: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
         scale.fromValue = 1
@@ -80,12 +80,12 @@ class BubbleShape: UIView {
         scale.timingFunction = CAMediaTimingFunction(controlPoints: 0.2, 0.88, 0.09, 0.99)
 
         
-        self.shapeLayer.removeAllAnimations()
-        self.shadowLayer.removeAllAnimations()
-        self.shadowLayer.add(scale, forKey: scale.keyPath)
-        self.shapeLayer.add(scale, forKey: scale.keyPath)
+        shapeLayer.removeAllAnimations()
+        shadowLayer.removeAllAnimations()
+        shadowLayer.add(scale, forKey: scale.keyPath)
+        shapeLayer.add(scale, forKey: scale.keyPath)
 
-        for item in self.items! {
+        for item in items {
             item.removeFromSuperview()
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
@@ -94,47 +94,47 @@ class BubbleShape: UIView {
     }
 
     open func animateAppearance() {
-        guard items != nil else { return }
+        guard let items = items else { return }
 
         let scale: CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
         scale.fromValue = 0
         scale.toValue = 1
         scale.duration = 0.5
         scale.timingFunction = CAMediaTimingFunction(controlPoints: 0.2, 0.88, 0.09, 0.99)
-        self.isHidden = false
+        isHidden = false
 
         if layer.sublayers == nil {
-            self.layer.insertSublayer(self.shadowLayer, at: 0)
-            self.layer.insertSublayer(self.shapeLayer, at: 1)
+            layer.insertSublayer(shadowLayer, at: 0)
+            layer.insertSublayer(shapeLayer, at: 1)
         }
 
-        for item in self.items! {
-            self.addSubview(item)
+        for item in items {
+            addSubview(item)
         }
 
-        self.shadowLayer.add(scale, forKey: scale.keyPath)
-        self.shapeLayer.add(scale, forKey: scale.keyPath)
+        shadowLayer.add(scale, forKey: scale.keyPath)
+        shapeLayer.add(scale, forKey: scale.keyPath)
 
-        
+
         // constraint for first item
-        self.items![0].centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        self.addConstraint(NSLayoutConstraint(item: self.items![0],
+        items[0].centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        addConstraint(NSLayoutConstraint(item: items[0],
                                               attribute: .left,
                                               relatedBy: .equal,
                                               toItem: self,
                                               attribute: .left,
                                               multiplier: 1,
-                                              constant: 1))
+                                              constant: 10))
         // constraint for the rest of items
-        for i in 1..<self.items!.count {
-            self.items![i].centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-            self.addConstraint(NSLayoutConstraint(item: self.items![i],
+        for i in 1..<items.count {
+            items[i].centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+            addConstraint(NSLayoutConstraint(item: items[i],
                                                   attribute: .leftMargin,
                                                   relatedBy: .equal,
-                                                  toItem: self.items![i-1],
+                                                  toItem: items[i-1],
                                                   attribute: .leftMargin,
                                                   multiplier: 1,
-                                                  constant: (self.items![i-1].imageView?.image?.size.width ?? 0) + self.marginLeft))
+                                                  constant: (items[i-1].imageView?.image?.size.width ?? 0) + spaceBetweenItem))
         }
 
     }

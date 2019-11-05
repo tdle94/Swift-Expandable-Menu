@@ -14,13 +14,13 @@ class BubbleShapeItem: UIButton {
 
     init(title: String? = nil, image: UIImage? = nil, tappedAction: (() -> Void)?) {
         super.init(frame: .zero)
-        self.setImage(image, for: UIControlState.normal)
+        self.setImage(image, for: .normal)
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .clear
         self.titleLabel?.text = title
         self.clipsToBounds = true
         self.tappedAction = tappedAction
-        self.addTarget(self, action: #selector(self.onTap), for: UIControlEvents.touchUpInside)
+        self.addTarget(self, action: #selector(onTap), for: .touchUpInside)
         self.titleEdgeInsets.left = 100
     }
 

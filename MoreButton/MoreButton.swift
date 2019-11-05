@@ -83,27 +83,27 @@ class MoreButton: UIButton {
                 self.layoutIfNeeded()
             }
         }
-        self.pulsate()
-        self.displayMore = !self.displayMore
+        pulsate()
+        displayMore = !displayMore
     }
 
     @objc func onTap() {
-        self.animatePlusSign()
+        animatePlusSign()
     }
 
     // MARK: - override funcs
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .clear
-        self.layer.insertSublayer(self.shadowLayer, at: 0)
-        self.layer.insertSublayer(self.plusSignLayer, at: 1)
-        self.insertSubview(self.bubbleShape, at: 0)
+        backgroundColor = .clear
+        layer.insertSublayer(shadowLayer, at: 0)
+        layer.insertSublayer(plusSignLayer, at: 1)
+        insertSubview(bubbleShape, at: 0)
 
-        self.bubbleShape.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        self.bubbleShapeBottomAnchor = bubbleShape.bottomAnchor.constraint(equalTo: bottomAnchor)
-        self.bubbleShapeBottomAnchor.isActive = true
-        self.bubbleShape.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        self.addTarget(self, action: #selector(self.onTap), for: UIControlEvents.touchUpInside)
+        bubbleShape.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        bubbleShapeBottomAnchor = bubbleShape.bottomAnchor.constraint(equalTo: bottomAnchor)
+        bubbleShapeBottomAnchor.isActive = true
+        bubbleShape.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        addTarget(self, action: #selector(onTap), for: UIControlEvents.touchUpInside)
     }
 
     /// need to detect tap of bubbleShape, which is outside the bound of its superview MoreButton
